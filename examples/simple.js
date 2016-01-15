@@ -9,4 +9,8 @@ const shape = require('kittik-shape-rectangle').default.create({
   width: '50%'
 });
 
-new Slide({direction: 'inDown'}).on('tick', shape => shape.render(cursor) && cursor.flush().eraseScreen()).animate(shape);
+new Slide({
+  direction: 'inDown',
+  easing: 'outBounce',
+  duration: 3000
+}).on('tick', shape => shape.render(cursor) && cursor.flush().eraseScreen()).animate(shape);
