@@ -1,6 +1,6 @@
 import Animation from 'kittik-animation-basic';
 
-const AVAILABLE_DIRECTIONS = ['in', 'inUp', 'inDown', 'inLeft', 'inRight', 'out', 'outUp', 'outDown', 'outLeft', 'outRight'];
+const AVAILABLE_DIRECTIONS = ['inUp', 'inDown', 'inLeft', 'inRight', 'outUp', 'outDown', 'outLeft', 'outRight'];
 
 /**
  * Slide animation that animates sliding of the shapes.
@@ -29,31 +29,24 @@ export default class Slide extends Animation {
    * @param {String} direction
    * @returns {Animation}
    */
-  setDirection(direction = 'inLeft') {
+  setDirection(direction = 'inRight') {
     if (AVAILABLE_DIRECTIONS.indexOf(direction) === -1) throw new Error(`Unknown direction: ${direction}`);
     return this.set('direction', direction);
   }
 
   /**
-   * Main method that calls when shape need to be animated.
+   * Get shape instance and calculate startX, startY, endX and endY coordinates based on direction.
    *
-   * @override
    * @param {Shape} shape
-   * @param {Cursor} cursor
+   * @private
    */
-  animate(shape, cursor) {
+  _parseCoordinates(shape) {
     let startX = shape.getX();
     let startY = shape.getY();
     let endX = shape.getX();
     let endY = shape.getY();
 
     switch (this.getDirection()) {
-      case 'in':
-        startX = Math.round(Math.random() * process.stdout.columns);
-        startY = Math.round(Math.random() * process.stdout.rows);
-        endX = shape.getX();
-        endY = shape.getY();
-        break;
       case 'inUp':
         startX = shape.getX();
         startY = -shape.getHeight();
@@ -62,7 +55,7 @@ export default class Slide extends Animation {
         break;
       case 'inDown':
         startX = shape.getX();
-        startY = process.stdout.rows;
+        startY = process.stdout.rows + shape.getHeight();
         endX = shape.getX();
         endY = shape.getY();
         break;
@@ -73,16 +66,10 @@ export default class Slide extends Animation {
         endY = shape.getY();
         break;
       case 'inRight':
-        startX = process.stdout.columns;
+        startX = process.stdout.columns + shape.getWidth();
         startY = shape.getY();
         endX = shape.getX();
         endY = shape.getY();
-        break;
-      case 'out':
-        startX = shape.getX();
-        startY = shape.getY();
-        endX = process.stdout.columns + shape.getWidth();
-        endY = process.stdout.rows + shape.getHeight();
         break;
       case 'outUp':
         startX = shape.getX();
@@ -105,22 +92,29 @@ export default class Slide extends Animation {
       case 'outRight':
         startX = shape.getX();
         startY = shape.getY();
-        endX = process.stdout.columns + shape.getWidth();
-        endY = shape.getY();
-        break;
-      default:
-        startX = shape.getX();
-        startY = shape.getY();
-        endX = shape.getX();
+        endX = process.stdout.columns;
         endY = shape.getY();
         break;
     }
+
+    return {startX, startY, endX, endY};
+  }
+
+  /**
+   * Main method that calls when shape need to be animated.
+   *
+   * @override
+   * @param {Shape} shape
+   * @param {Cursor} cursor
+   */
+  animate(shape, cursor) {
+    const {startX, startY, endX, endY} = this._parseCoordinates(shape);
 
     return new Promise(resolve => {
       return Promise.all([
         this.animateProperty({shape: shape, property: 'x', startValue: startX, endValue: endX}),
         this.animateProperty({shape: shape, property: 'y', startValue: startY, endValue: endY})
-      ]).then(shape => resolve(shape));
+      ]).then(() => resolve(shape));
     });
   }
 
