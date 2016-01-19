@@ -90,4 +90,22 @@ describe('Animation::Slide', () => {
       }
     });
   });
+
+  it('Should properly create Animation instance from object', () => {
+    const obj = {
+      type: 'Slide',
+      options: {
+        duration: 4000,
+        easing: 'inOutExpo',
+        direction: 'inLeft'
+      }
+    };
+
+    const animation = Slide.fromObject(obj);
+    assert.instanceOf(animation, Slide);
+    assert.equal(animation.getDuration(), 4000);
+    assert.equal(animation.getEasing(), 'inOutExpo');
+    assert.equal(animation.getDirection(), 'inLeft');
+    assert.isFunction(animation.animate);
+  });
 });
