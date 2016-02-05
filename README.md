@@ -28,19 +28,19 @@ Include in your project:
 ```javascript
 import Slide from 'kittik-animation-slide';
 import Rectangle from 'kittik-shape-rectangle';
-import { Cursor } from 'kittik-cursor';
+import Cursor from 'kittik-cursor';
 
 const cursor = Cursor.create();
 const shape = Rectangle.create();
 
-Slide.create().animate(shape, cursor).then(shape => doSmthNextWithShape(shape));
+Slide.create().animate(shape, cursor).then(shape => doSmthElseWithShape(shape));
 ```
 
 ## License
 
 The MIT License (MIT)
 
-Copyright (c) 2015 Eugene Obrezkov
+Copyright (c) 2015-2016 Eugene Obrezkov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
