@@ -1,8 +1,8 @@
 "use strict";
 
-const cursor = require('kittik-cursor').default.create().resetTTY();
-const Slide = require('../lib/Slide').default;
-const shape = require('kittik-shape-rectangle').default.create({
+const cursor = require('kittik-cursor').create().resetTTY();
+const Slide = require('../lib/Slide');
+const shape = require('kittik-shape-rectangle').create({
   text: 'Good news, everybody!',
   x: 'center',
   background: 'white',

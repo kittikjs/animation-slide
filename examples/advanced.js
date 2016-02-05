@@ -1,8 +1,8 @@
 "use strict";
 
-const cursor = require('kittik-cursor').default.create().resetTTY();
-const Rectangle = require('kittik-shape-rectangle').default;
-const Slide = require('../lib/Slide').default;
+const cursor = require('kittik-cursor').create().resetTTY();
+const Rectangle = require('kittik-shape-rectangle');
+const Slide = require('../lib/Slide');
 const AVAILABLE_DIRECTIONS = ['inUp', 'inDown', 'inLeft', 'inRight'];
 const shapes = [
   Rectangle.create({background: 'dark_blue', x: 'left', y: 'top', text: 'Shape 1'}),
