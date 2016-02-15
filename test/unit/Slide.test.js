@@ -60,7 +60,7 @@ describe('Animation::Slide', () => {
     assert.deepEqual(animation._parseCoordinates(shape), {
       startX: 10,
       startY: 10,
-      endX: process.stdout.columns,
+      endX: process.stdout.columns + 1,
       endY: 10
     });
   });
