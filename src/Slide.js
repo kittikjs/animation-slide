@@ -41,62 +41,18 @@ export default class Slide extends Animation {
    * @private
    */
   _parseCoordinates(shape) {
-    let startX = shape.getX();
-    let startY = shape.getY();
-    let endX = shape.getX();
-    let endY = shape.getY();
+    const directions = {
+      inUp: () => [shape.getX(), -shape.getHeight(), shape.getX(), shape.getY()],
+      inDown: () => [shape.getX(), process.stdout.rows + shape.getHeight(), shape.getX(), shape.getY()],
+      inLeft: () => [-shape.getWidth(), shape.getY(), shape.getX(), shape.getY()],
+      inRight: () => [process.stdout.columns + shape.getWidth(), shape.getY(), shape.getX(), shape.getY()],
+      outUp: () => [shape.getX(), shape.getY(), shape.getX(), -shape.getHeight()],
+      outDown: () => [shape.getX(), shape.getY(), shape.getX(), process.stdout.rows + shape.getHeight()],
+      outLeft: () => [shape.getX(), shape.getY(), -shape.getWidth(), shape.getY()],
+      outRight: () => [shape.getX(), shape.getY(), process.stdout.columns + 1, shape.getY()]
+    };
 
-    switch (this.getDirection()) {
-      case 'inUp':
-        startX = shape.getX();
-        startY = -shape.getHeight();
-        endX = shape.getX();
-        endY = shape.getY();
-        break;
-      case 'inDown':
-        startX = shape.getX();
-        startY = process.stdout.rows + shape.getHeight();
-        endX = shape.getX();
-        endY = shape.getY();
-        break;
-      case 'inLeft':
-        startX = -shape.getWidth();
-        startY = shape.getY();
-        endX = shape.getX();
-        endY = shape.getY();
-        break;
-      case 'inRight':
-        startX = process.stdout.columns + shape.getWidth();
-        startY = shape.getY();
-        endX = shape.getX();
-        endY = shape.getY();
-        break;
-      case 'outUp':
-        startX = shape.getX();
-        startY = shape.getY();
-        endX = shape.getX();
-        endY = -shape.getHeight();
-        break;
-      case 'outDown':
-        startX = shape.getX();
-        startY = shape.getY();
-        endX = shape.getX();
-        endY = process.stdout.rows + shape.getHeight();
-        break;
-      case 'outLeft':
-        startX = shape.getX();
-        startY = shape.getY();
-        endX = -shape.getWidth();
-        endY = shape.getY();
-        break;
-      case 'outRight':
-        startX = shape.getX();
-        startY = shape.getY();
-        endX = process.stdout.columns;
-        endY = shape.getY();
-        break;
-    }
-
+    const [startX, startY, endX, endY] = directions[this.getDirection()]();
     return {startX, startY, endX, endY};
   }
 
@@ -110,12 +66,10 @@ export default class Slide extends Animation {
   animate(shape, cursor) {
     const {startX, startY, endX, endY} = this._parseCoordinates(shape);
 
-    return new Promise(resolve => {
-      return Promise.all([
-        this.animateProperty({shape: shape, property: 'x', startValue: startX, endValue: endX}),
-        this.animateProperty({shape: shape, property: 'y', startValue: startY, endValue: endY})
-      ]).then(() => resolve(shape));
-    });
+    return Promise.all([
+      this.animateProperty({shape: shape, property: 'x', startValue: startX, endValue: endX}),
+      this.animateProperty({shape: shape, property: 'y', startValue: startY, endValue: endY})
+    ]).then(() => shape);
   }
 
   /**
