@@ -1,8 +1,8 @@
 "use strict";
 
-const cursor = require('kittik-cursor').create().resetTTY().hideCursor();
+const cursor = require('kittik-cursor').create().reset().hideCursor();
 const Slide = require('../lib/Slide');
-const shape = require('kittik-shape-rectangle').create({
+const shape = require('kittik-shape-rectangle').create(cursor, {
   text: 'Good news, everybody!',
   x: 'center',
   background: 'white',
@@ -10,4 +10,4 @@ const shape = require('kittik-shape-rectangle').create({
   width: '50%'
 });
 
-new Slide({duration: 3000}).on('tick', shape => shape.render(cursor) && cursor.flush().eraseScreen()).animate(shape).then(() => cursor.showCursor().flush());
+new Slide({duration: 3000}).on('tick', shape => cursor.eraseScreen() && shape.render() && cursor.flush()).animate(shape).then(() => cursor.showCursor());
