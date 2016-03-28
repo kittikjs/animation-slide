@@ -1,7 +1,10 @@
-import { assert } from 'chai';
+import {assert} from 'chai';
 import sinon from 'sinon';
+import Cursor from 'kittik-cursor';
 import Rectangle from 'kittik-shape-rectangle';
 import Slide from '../../src/Slide';
+
+const cursor = Cursor.create();
 
 describe('Animation::Slide', () => {
   it('Should properly get/set direction', () => {
@@ -18,7 +21,7 @@ describe('Animation::Slide', () => {
 
   it('Should properly parse coordinates for shape based on direction', () => {
     const animation = new Slide();
-    const shape = new Rectangle();
+    const shape = new Rectangle(cursor);
 
     assert.instanceOf(animation.setDirection('inUp'), Slide);
     assert.deepEqual(animation._parseCoordinates(shape), {startX: 10, startY: -5, endX: 10, endY: 10});
@@ -67,7 +70,7 @@ describe('Animation::Slide', () => {
 
   it('Should properly call the animate() method', done => {
     const animation = new Slide();
-    const shape = new Rectangle();
+    const shape = new Rectangle(cursor);
     const mock = sinon.mock(animation);
 
     mock.expects('animateProperty').twice().returns(Promise.resolve());
