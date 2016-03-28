@@ -8,6 +8,11 @@ const AVAILABLE_DIRECTIONS = ['inUp', 'inDown', 'inLeft', 'inRight', 'outUp', 'o
  * @since 1.0.0
  */
 export default class Slide extends Animation {
+  /**
+   * @constructor
+   * @param {Object} [options]
+   * @param {String} [options.direction]
+   */
   constructor(options = {}) {
     super(options);
 
@@ -41,15 +46,16 @@ export default class Slide extends Animation {
    * @private
    */
   _parseCoordinates(shape) {
+    const cursor = shape.getCursor();
     const directions = {
       inUp: () => [shape.getX(), -shape.getHeight(), shape.getX(), shape.getY()],
-      inDown: () => [shape.getX(), process.stdout.rows + shape.getHeight(), shape.getX(), shape.getY()],
+      inDown: () => [shape.getX(), cursor._height + shape.getHeight(), shape.getX(), shape.getY()],
       inLeft: () => [-shape.getWidth(), shape.getY(), shape.getX(), shape.getY()],
-      inRight: () => [process.stdout.columns + shape.getWidth(), shape.getY(), shape.getX(), shape.getY()],
+      inRight: () => [cursor._width + shape.getWidth(), shape.getY(), shape.getX(), shape.getY()],
       outUp: () => [shape.getX(), shape.getY(), shape.getX(), -shape.getHeight()],
-      outDown: () => [shape.getX(), shape.getY(), shape.getX(), process.stdout.rows + shape.getHeight()],
+      outDown: () => [shape.getX(), shape.getY(), shape.getX(), cursor._height + shape.getHeight()],
       outLeft: () => [shape.getX(), shape.getY(), -shape.getWidth(), shape.getY()],
-      outRight: () => [shape.getX(), shape.getY(), process.stdout.columns + 1, shape.getY()]
+      outRight: () => [shape.getX(), shape.getY(), cursor._width + 1, shape.getY()]
     };
 
     const [startX, startY, endX, endY] = directions[this.getDirection()]();
@@ -61,15 +67,14 @@ export default class Slide extends Animation {
    *
    * @override
    * @param {Shape} shape
-   * @param {Cursor} cursor
    */
-  animate(shape, cursor) {
+  animate(shape) {
     const {startX, startY, endX, endY} = this._parseCoordinates(shape);
 
     return Promise.all([
       this.animateProperty({shape: shape, property: 'x', startValue: startX, endValue: endX}),
       this.animateProperty({shape: shape, property: 'y', startValue: startY, endValue: endY})
-    ]).then(() => shape);
+    ]).then(() => Promise.resolve(shape));
   }
 
   /**
