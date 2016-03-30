@@ -1,17 +1,30 @@
 import Animation from 'kittik-animation-basic';
 
+/**
+ * Dictionary of all available directions, that you can use in animation.
+ *
+ * @type {Object}
+ * @private
+ */
 const AVAILABLE_DIRECTIONS = ['inUp', 'inDown', 'inLeft', 'inRight', 'outUp', 'outDown', 'outLeft', 'outRight'];
 
 /**
- * Slide animation that animates sliding of the shapes.
+ * Animation that animates sliding of the shapes.
  *
+ * @extends {Animation}
  * @since 1.0.0
  */
 export default class Slide extends Animation {
   /**
+   * Create Slide animation instance.
+   *
    * @constructor
-   * @param {Object} [options]
-   * @param {String} [options.direction]
+   * @param {Object} [options] Options object
+   * @param {String} [options.direction] Direction of the animation
+   * @example
+   * Slide.create({
+   *   direction: 'inLeft'
+   * }).animate(someShapeInstance);
    */
   constructor(options = {}) {
     super(options);
@@ -32,7 +45,7 @@ export default class Slide extends Animation {
    * Set new direction of the animation.
    *
    * @param {String} direction
-   * @returns {Animation}
+   * @returns {Slide}
    */
   setDirection(direction = 'inRight') {
     if (AVAILABLE_DIRECTIONS.indexOf(direction) === -1) throw new Error(`Unknown direction: ${direction}`);
@@ -43,6 +56,7 @@ export default class Slide extends Animation {
    * Get shape instance and calculate startX, startY, endX and endY coordinates based on direction.
    *
    * @param {Shape} shape
+   * @returns {Object} Returns an object with startX, startY, endX, endY properties
    * @private
    */
   _parseCoordinates(shape) {
@@ -67,6 +81,8 @@ export default class Slide extends Animation {
    *
    * @override
    * @param {Shape} shape
+   * @returns {Promise}
+   * @fulfil {Shape} When animation is done, fulfils with the Shape instance
    */
   animate(shape) {
     const {startX, startY, endX, endY} = this._parseCoordinates(shape);
@@ -80,6 +96,7 @@ export default class Slide extends Animation {
   /**
    * Serializes animation to Object representation.
    *
+   * @override
    * @returns {Object}
    */
   toObject() {
