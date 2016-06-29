@@ -13,7 +13,11 @@
 ![dependencies](https://img.shields.io/david/kittikjs/animation-slide.svg)
 ![dev dependencies](https://img.shields.io/david/dev/kittikjs/animation-slide.svg)
 
-Slide animation for Kittik shapes
+Slide animation for Kittik shapes.
+
+| Examples |
+| -------- |
+| ![kittik](https://cloud.githubusercontent.com/assets/3625244/16448313/795ce99e-3df9-11e6-98d8-c5c604f97ec9.gif) |
 
 ## Getting Started
 
@@ -33,8 +37,12 @@ import Cursor from 'kittik-cursor';
 const cursor = Cursor.create();
 const shape = Rectangle.create();
 
-Slide.create().animate(shape, cursor).then(shape => doSmthElseWithShape(shape));
+Slide.create().animate(shape).then(shape => doSmthElseWithShape(shape));
 ```
+
+## API
+
+API declaration is [here](./API.md).
 
 ## License
 
